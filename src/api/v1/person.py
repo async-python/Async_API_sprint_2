@@ -1,7 +1,6 @@
-from http import HTTPStatus
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from api.v1.out_models.film_out import FilmShortOut
 from api.v1.out_models.person_out import PersonOutFull, PersonOutShort

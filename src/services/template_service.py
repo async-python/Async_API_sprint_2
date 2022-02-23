@@ -61,12 +61,16 @@ class TemplateService:
         if not model:
             model = self.model
         body = get_pagination_query(page_number, page_size)
-        if query:
-            body = body | query
-        docs = await self.elastic.search(
-            index=es_index,
-            body=body
-        )
+        try:
+            if query:
+                body = body | query
+            docs = await self.elastic.search(
+                index=es_index,
+                body=body
+            )
+        except Exception:
+            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST,
+                                detail=f'bad request')
         if not docs['hits']['total']['value']:
             raise HTTPException(status_code=HTTPStatus.NOT_FOUND,
                                 detail='not found')

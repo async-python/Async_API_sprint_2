@@ -1,15 +1,13 @@
-from http import HTTPStatus
 from typing import Union
 
-from fastapi import HTTPException
+FIELD_MAPPING = {'imdb_rating': 'rating'}  # поля входной и выходной модели отличаются
 
 
 def get_sort_body(sort: str):
     order = 'desc' if sort.startswith('-') else 'asc'
     field = sort.removeprefix('-')
-    if not field.endswith('rating'):
-        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST,
-                            detail=f'sorting by {field} is not available')
+    if field in FIELD_MAPPING.keys():
+        field = FIELD_MAPPING[field]
     return get_sort_query(field, order)
 
 

@@ -1,9 +1,7 @@
-from pathlib import Path
-
 from pydantic import BaseSettings
 
 
-class TestSettings(BaseSettings):
+class ConfTest(BaseSettings):
     redis_host: str = 'localhost'
     redis_port: int = 6379
     redis_password: str
@@ -14,6 +12,8 @@ class TestSettings(BaseSettings):
     elastic_index_film: str = 'movie'
     elastic_index_genre: str = 'genre'
     elastic_index_person: str = 'person'
+    service_host: str = 'localhost'
+    service_port: str = 8000
 
     class Config:
         env_file = './.env'

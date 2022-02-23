@@ -1,7 +1,6 @@
-from http import HTTPStatus
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from api.v1.out_models.genre_out import GenreOut
 from models.genre import Genre
