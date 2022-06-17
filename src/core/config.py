@@ -1,25 +1,34 @@
-import os
 from logging import config as logging_config
 from pathlib import Path
 
-from dotenv import load_dotenv
+from pydantic import BaseSettings, DirectoryPath, Field
 
 from core.logger import LOGGING
 
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-
-load_dotenv()
-
+# Применяем настройки логирования
 logging_config.dictConfig(LOGGING)
 
-PROJECT_NAME = os.getenv('PROJECT_NAME', 'movies')
 
-REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
-REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
-REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
+class AppSettings(BaseSettings):
+    # Название проекта. Используется в Swagger-документации
+    PROJECT_NAME: str = Field(default="movies", env="PROJECT_NAME")
+    # Параметры подключения к БД
+    REDIS_HOST: str = Field(default="localhost", env="REDIS_HOST")
+    REDIS_PORT: str = Field(default="6379", env="REDIS_PORT")
+    ELASTIC_SCHEME: str = Field(default="http", env="ELASTIC_SCHEME")
+    ELASTIC_HOST: str = Field(default="localhost", env="ELASTIC_HOST")
+    ELASTIC_PORT: str = Field(default="9200", env="ELASTIC_PORT")
 
-ELASTIC_HOST = os.getenv('ELASTIC_HOST', '127.0.0.1')
-ELASTIC_PORT = int(os.getenv('ELASTIC_PORT', 9200))
-ELASTIC_USER = os.getenv('ELASTIC_USER')
-ELASTIC_PASSWORD = os.getenv('ELASTIC_PASSWORD')
-ELASTIC_INDEX_FILM = os.getenv('ELASTIC_INDEX_FILM', 'movie')
+    # Имена индексов в Elasticsearch
+    ELASTIC_INDEX_FILM: str = Field(
+        default="movies", env="ELASTIC_INDEX_FILM")
+    ELASTIC_INDEX_GENRE: str = Field(
+        default="genres", env="ELASTIC_INDEX_GENRE")
+    ELASTIC_INDEX_PERSON: str = Field(
+        default="persons", env="ELASTIC_INDEX_PERSON")
+
+    # Корень проекта
+    BASE_DIR: DirectoryPath = Path(__file__).parent.parent
+
+
+config = AppSettings()
